@@ -1,6 +1,7 @@
 {
-  "name": "ui-playground",
+  "name": "frontend-sandbox",
   "version": "0.1.0",
+  "description": "一个基于 Vite 的多框架前端实验沙盒，支持快速创建和预览 React、Vue 等各种 UI 组件",
   "private": true,
   "type": "module",
   "scripts": {
