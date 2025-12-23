@@ -52,16 +52,19 @@ export default defineConfig({
           const url = new URL(req.url, 'http://localhost');
           const pathname = url.pathname;
 
-          const match = pathname.match(/^\/([^\/\?\.]+)(\/.*)?$/);
+          // 支持两种 URL 风格：`/name/...` 和 `/sandboxs/name/...`
+          const match = pathname.match(/^\/(?:sandboxs\/)?([^\/\?\.]+)(\/.*)?$/);
           if (match && match[1] !== '' && match[1] !== 'index' && !match[1].startsWith('@')) {
             const folderName = match[1];
             const restPath = match[2] || '';
+            const hasSandboxPrefix = pathname.startsWith('/sandboxs/');
             const folderPath = path.join(__dirname, 'sandboxs', folderName);
 
             // 让 /<name> 以目录形式访问，保证相对资源路径（./index.js 等）正确解析
             if (restPath === '' && !pathname.endsWith('/')) {
+              const prefix = hasSandboxPrefix ? '/sandboxs' : '';
               res.statusCode = 302;
-              res.setHeader('Location', `/${folderName}/${url.search}`);
+              res.setHeader('Location', `${prefix}/${folderName}/${url.search}`);
               res.end();
               return;
             }
